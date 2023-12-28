@@ -24,13 +24,13 @@ const updateAvailability = () => {
 const getColor = (category) => {
   return category == "women's clothing" ? '#720060' :
       category == "men's clothing" ? '#002772' :
-          '#DCDCDC'; // Default color for unknown category
+          '#DCDCDC';
 }
 
 const getBackgroundColor = (category) => {
   return category == "women's clothing" ? '#FDE2FF' :
       category == "men's clothing" ? '#D6E6FF' :
-          '#DCDCDC'; // Default color for unknown category
+          '#DCDCDC';
 }
 
 const getNextButtonStyle = (category) => {
@@ -41,7 +41,7 @@ const getNextButtonStyle = (category) => {
 };
 
 const getRectangleStyle = (category) => {
-  const pattern = './assets/bg-pattern.svg'
+  const pattern = './assets/bg-pattern.png'
   return {
     background: getBackgroundColor(category),
     backgroundImage: `url('${pattern}')`,
@@ -88,20 +88,20 @@ const limitDescription = (description, wordLimit) => {
                   <template v-for="i in 5">
                     <template v-if="i <= Math.floor(products[currentIndex].rating.rate)">
                       <!-- Ikon rating penuh -->
-                      <svg width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="9" cy="9" r="9" fill="#002772"/>
+                      <svg width="15" height="15" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="9" cy="9" r="9" :fill="getColor(products[currentIndex].category)" />
                       </svg>
                     </template>
                     <template v-else-if="i <= products[currentIndex].rating.rate">
                       <!-- Ikon rating setengah -->
                       <svg width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="9" cy="9" r="8.5" fill="white" :stroke="'#002772'"/>
+                        <circle cx="9" cy="9" r="8.5" fill="white" :stroke="getColor(products[currentIndex].category)"/>
                       </svg>
                     </template>
                     <template v-else>
                       <!-- Ikon rating kosong -->
                       <svg width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="9" cy="9" r="8.5" fill="white" :stroke="'#002772'"/>
+                        <circle cx="9" cy="9" r="8.5" fill="white" :stroke="getColor(products[currentIndex].category)"/>
                       </svg>
                     </template>
                   </template>
@@ -258,9 +258,10 @@ const limitDescription = (description, wordLimit) => {
 .sad {
   background-image: url("./assets/sad-face.svg");
   width: 100%;
-  background-position: right;
+  background-position: center;
   display: flex;
   justify-content: center;
+  background-repeat: no-repeat;
   align-items: center;
 }
 
