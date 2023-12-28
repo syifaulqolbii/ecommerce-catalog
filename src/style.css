@@ -1,0 +1,37 @@
+/* Reset CSS */
+:root {
+  --padding: 0;
+  --margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: var(--margin);
+  padding: var(--padding);
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+/* Add your additional styles here */
