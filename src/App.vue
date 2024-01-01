@@ -1,37 +1,42 @@
-<script setup>
+<script setup xmlns="http://www.w3.org/1999/html">
 import {ref, onMounted} from 'vue';
 
 const products = ref([]);
 const currentIndex = ref(0);
 const currentProductCategory = ref('');
 const isAvailableCategory = ref(true);
+const isLoading = ref(true);
 
 // Fetch products from the API
 onMounted(async () => {
-  const response = await fetch('https://fakestoreapi.com/products');
-  products.value = await response.json();
-  console.log(products)
-  updateCurrentProductCategory();
-  updateAvailability();
+  try {
+    const response = await fetch('https://fakestoreapi.com/products');
+    products.value = await response.json();
+    console.log(products);
+    updateCurrentProductCategory();
+    updateAvailability();
+  } finally {
+    isLoading.value = false;
+  }
 });
 
 const updateAvailability = () => {
   const currentCategory = products.value[currentIndex.value]?.category;
-
-  isAvailableCategory.value = currentCategory == "men's clothing" || currentCategory == "women's clothing";
+  isAvailableCategory.value =
+      currentCategory == "men's clothing" || currentCategory == "women's clothing";
 };
 
 const getColor = (category) => {
   return category == "women's clothing" ? '#720060' :
       category == "men's clothing" ? '#002772' :
           '#DCDCDC';
-}
+};
 
 const getBackgroundColor = (category) => {
   return category == "women's clothing" ? '#FDE2FF' :
       category == "men's clothing" ? '#D6E6FF' :
           '#DCDCDC';
-}
+};
 
 const getNextButtonStyle = (category) => {
   return {
@@ -41,12 +46,12 @@ const getNextButtonStyle = (category) => {
 };
 
 const getRectangleStyle = (category) => {
-  const pattern = './assets/bg-pattern.png'
+  const pattern = './assets/bg-pattern.png';
   return {
     background: getBackgroundColor(category),
     backgroundImage: `url('${pattern}')`,
-  }
-}
+  };
+};
 
 const updateCurrentProductCategory = () => {
   currentProductCategory.value = products.value[currentIndex.value]?.category || '';
@@ -69,7 +74,8 @@ const limitDescription = (description, wordLimit) => {
 
 <template>
   <div class="container">
-    <div class="rectangle" :style="getRectangleStyle(products[currentIndex]?.category)">
+    <div v-if="isLoading" class="skeleton-loading"></div>
+    <div v-else class="rectangle" :style="getRectangleStyle(products[currentIndex]?.category)">
       <div v-if="isAvailableCategory">
         <div class="card">
           <div class="image-container" v-if="products.length > 0 && products[currentIndex].image">
@@ -89,7 +95,7 @@ const limitDescription = (description, wordLimit) => {
                     <template v-if="i <= Math.floor(products[currentIndex].rating.rate)">
                       <!-- Ikon rating penuh -->
                       <svg width="15" height="15" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="9" cy="9" r="9" :fill="getColor(products[currentIndex].category)" />
+                        <circle cx="9" cy="9" r="9" :fill="getColor(products[currentIndex].category)"/>
                       </svg>
                     </template>
                     <template v-else-if="i <= products[currentIndex].rating.rate">
@@ -277,5 +283,26 @@ const limitDescription = (description, wordLimit) => {
 .nextSad {
   width: 130%;
   cursor: pointer;
+}
+
+.skeleton-loading {
+  width: 100%;
+  height: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  animation: skeleton-loading-animation 1s infinite alternate;
+}
+
+@keyframes skeleton-loading-animation {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
